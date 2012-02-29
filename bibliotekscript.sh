@@ -32,3 +32,24 @@ importid=`cat /tmp/steg1 | grep "tr id" | sed s/"\<tr\ id\=\"row"// | awk '{ pri
 biblioid=`cat /tmp/steg1 | grep "form method" | awk '{ print $6 }' | sed s/'value\=\"'// | sed s/'\"\/><input'//`
 steg2url="http://$server/cgi-bin/koha/`cat /tmp/steg1 | grep opener | sed s/'\.\/'/'\ '/ | awk '{ print $2 }' | sed s/'\"+biblionumber+\"'/$biblioid/ | sed s/'\"+GetThisOne;'/$importid/`"
 wget -q -O /tmp/steg2 --load-cookies /tmp/cookies $steg2url
+stop=0
+counter=3
+echo
+echo Select type of book:
+echo
+while [ $stop != 1 ];
+do
+counter2=$(( $counter2 + 1 ))
+cat /tmp/steg2 | grep "tag_942_subfield_c.*\".*tabindex" -A 9999 | head -$counter | tail -1 | grep "option value" > /dev/null || stop=1
+if [ $stop != 1 ]; then
+printf $counter2.\ 
+fi
+cat /tmp/steg2 | grep "tag_942_subfield_c.*\".*tabindex" -A 9999 | head -$counter | tail -1 | grep "option value" | grep "\<option value\=\"" | sed s/'<option.*\">'// | sed s/'<\/option>'//
+export eval booktype$counter2=`cat /tmp/steg2 | grep 'tag_942_subfield_c.*\".*tabindex' -A 9999 | head -$counter | tail -1 | grep "option value" | sed s/'<option.*=\"'// | sed s/'\".*'//`
+counter=$(( $counter + 1 ))
+done
+echo
+read bookchoice
+choice0=\$booktype$bookchoice
+eval choice=$choice0
+echo $choice
