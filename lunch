@@ -1,0 +1,4 @@
+#!/bin/sh
+cat /tmp/matsedel 2> /dev/null | grep -i vecka > /dev/null 2>&1 || wget -q http://ahavaxthuset.se/matsedel/ -O - | grep -A 9999 \<h2\>Matsedel | head -`wget -q http://ahavaxthuset.se/matsedel/ -O - | grep -A 9999 \<h2\>Matsedel | grep -n "\<div class=\"clear\"" | head -1 | cut -f1 -d:` | sed s/\<strong\>\<br\ .\>\<.strong\>/' - '/g | sed s/\<em\>\<br\ .\>\<.em\>/' - '/g  | sed s/\<p\>\<strong\>//g | sed s/\&Aring\;/Å/g | sed s/\<.strong\>\<.p\>//g | sed s/\&aring\;/å/g | sed s/\<br\ .\>\<.strong\>/' '/g | sed s/\&ouml\;/ö/g | sed s/\<br\ .\>\<strong\>/'\n'/g | sed s/\<br\ .\>/' - '/g  | sed s/\<.strong\>\ -//g | sed s/\<.p\>//g | sed s/\<p\>\&nbsp\;//g | sed s/\<strong\>\ -\ /'\n'/g | sed s/\<em\>\ -\ \<.em\>//g | sed s/\<.strong\>\ \ -//g | sed s/\<strong\>//g | sed s/\&auml\;/ä/g | sed s/\&eacute\;/é/g | egrep -v \<.div\> | grep -v \<h2\>Matsedel | grep -v TERMINEN | grep -v [[:cntrl:]] | uniq > /tmp/matsedel
+cat /tmp/matsedel
+exit

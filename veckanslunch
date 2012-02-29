@@ -1,0 +1,18 @@
+#!/bin/sh
+lv=`lunch | grep -i vecka | tail -1 | awk '{ print $2}'` # bestäm sista veckan
+dv=`date +%V | sed s/^0//` # bestäm denna vecka
+nv=$(( $dv + 1 )) # bestäm nästa vecka
+dvl=`lunch | grep -n "Vecka $dv" | cut -f1 -d:` # bestäm denna veckas radnummer
+nvl=`lunch | grep -n "Vecka $nv" | cut -f1 -d:` # bestäm nästa veckas radnummer
+pl=`lunch | wc -l` # bestäm antal rader i hela matsedeln
+l=$(( $pl + 1 )) # antal rader i matsedeln ökat med 1
+dvr=$(( $l - $dvl )) # bestäm omfång från denna veckas radnummer till slut
+if [ $dv != $lv ]; then # kontrollera att denna vecka inte är den sista
+    r=$(( $nvl - $dvl )) # bestäm totalt antal rader för denna vecka
+fi
+if [ $dv != $lv ]; then # kontrollera att denna vecka inte är den sista
+    lunch | tail -$dvr | head -$r # printa matsedel för denna vecka
+else
+    lunch | tail -$dvr # printa matsedel för denna vecka
+fi
+exit

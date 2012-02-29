@@ -1,0 +1,18 @@
+#!/bin/sh
+vdn=`date +%u ` # Bestäm veckodag i nummer
+vd=`echo $vdn | sed s/1/Mån/ | sed s/2/Tis/ | sed s/3/Ons/ | sed s/4/Tors/ | sed s/5/Fre/` # Konvertera till veckodag på svenska
+nvdn=$(( $vdn + 1 )) # Bestäm nästa veckodag i nummer
+nvd=`echo $nvdn | sed s/1/Mån/ | sed s/2/Tis/ | sed s/3/Ons/ | sed s/4/Tors/ | sed s/5/Fre/` # Konvertera till veckodag på svenska
+vdl=`veckanslunch | grep -n $vd | cut -f1 -d:` # Radnummer för veckodag
+nvl=`veckanslunch | grep -n $nvd | cut -f1 -d:` # Radnummer för nästa veckodag
+pl=`veckanslunch | wc -l` # Bestäm antal rader för hela veckan
+l=$(( $pl + 1 )) # Antal rader för veckan ökat med 1
+vdr=$(( $l - $vdl )) # Veckodagens antal rader innan nästa dag (omfång)
+if [ $vdn != 5 ]; then # Kontrollerar om det inte är fredag
+    r=$(( $nvl - $vdl )) # Bestäm omfång i rader från idag till imorgon
+fi
+if [ $vdn = 5 ]; then # Kontrollerar om det är fredag
+   veckanslunch | tail -$vdr # printa matsedel för idag
+else
+    veckanslunch | tail -$vdr | head -$r # printa matsedel för idag
+fi
