@@ -15,6 +15,9 @@ userid=
 # FILL IN YOUR KOHA PASSWORD HERE!
 password=
 
+# THE IP AND PORT OF YOUR KOHA SERVER, FOR EXAMPLE server="192.168.0.2:80"
+server=
+
 wget -O /tmp/steg0 -q --post-data=koha_login_context=$koha_login_context\&logout.x=$logoutx\&userid=$userid\&password=$password\&branch= --save-cookies /tmp/cookies http://$server/cgi-bin/koha/mainpage.pl
 op="do_search"
 echo ISBN Number to search for?
@@ -22,8 +25,6 @@ read isbn
 biblionumber="0"
 id="13"
 
-# THE IP AND PORT OF YOUR KOHA SERVER, FOR EXAMPLE server="192.168.0.2:80"
-server=
 
 
 wget -O /tmp/steg1 --load-cookies /tmp/cookies -q http://$server/cgi-bin/koha/cataloguing/z3950_search.pl?frameworkcode= --post-data=op=$op\&isbn=$isbn\&biblionumber=$biblionumber\&id=$id
