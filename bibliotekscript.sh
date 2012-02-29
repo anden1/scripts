@@ -18,7 +18,7 @@ password=
 # THE IP AND PORT OF YOUR KOHA SERVER, FOR EXAMPLE server="192.168.0.2:80"
 server=
 
-wget -O /tmp/steg0 -q --post-data=koha_login_context=$koha_login_context\&logout.x=$logoutx\&userid=$userid\&password=$password\&branch= --save-cookies /tmp/cookies http://$server/cgi-bin/koha/mainpage.pl
+wget -O /tmp/steg0 -q --post-data=koha_login_context=$koha_login_context\&logout.x=$logoutx\&userid=$userid\&password=$password\&branch= --keep-session-cookies --save-cookies /tmp/cookies http://$server/cgi-bin/koha/mainpage.pl
 op="do_search"
 echo ISBN Number to search for?
 read isbn
