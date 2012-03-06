@@ -28,6 +28,8 @@ id="13"
 
 
 wget -O /tmp/steg1 --load-cookies /tmp/cookies -q http://$server/cgi-bin/koha/cataloguing/z3950_search.pl?frameworkcode= --post-data=op=$op\&isbn=$isbn\&biblionumber=$biblionumber\&id=$id
+echo
+cat /tmp/steg1 | grep "Preview MARC" -A 3 | tail -3 | sed s/'.*<td>'// | sed s/'<\/td>'//
 importid=`cat /tmp/steg1 | grep "tr id" | sed s/"\<tr\ id\=\"row"// | awk '{ print $1 }' | sed s/\<// | sed s/\"\>//`
 biblioid=`cat /tmp/steg1 | grep "form method" | awk '{ print $6 }' | sed s/'value\=\"'// | sed s/'\"\/><input'//`
 steg2url="http://$server/cgi-bin/koha/`cat /tmp/steg1 | grep opener | sed s/'\.\/'/'\ '/ | awk '{ print $2 }' | sed s/'\"+biblionumber+\"'/$biblioid/ | sed s/'\"+GetThisOne;'/$importid/`"
@@ -35,7 +37,7 @@ wget -q -O /tmp/steg2 --load-cookies /tmp/cookies $steg2url
 stop=0
 counter=3
 echo
-echo Select type of book:
+echo Select type of book \(or cancel with CTRL + C if the above is not correct\):
 echo
 while [ $stop != 1 ];
 do
